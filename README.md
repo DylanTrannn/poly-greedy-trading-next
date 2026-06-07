@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Greedy Digest (Next.js)
 
-## Getting Started
+Near-close Polymarket scanner with optional AI analysis. Single Next.js app deployable to Vercel — no separate API server or Postgres.
 
-First, run the development server:
+## Features
+
+- Live Gamma API scan with SSE progress
+- Same dark UI as the original monorepo web app
+- Optional **Analyze with AI** when `OPENROUTER_API_KEY` is set (fallback text when not)
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cp .env.example .env
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEAR_CLOSE_MAX_HOURS` | No | Scan window (default 4) |
+| `MIN_OUTCOME_PROB` | No | Min leading outcome (default 0.96) |
+| `SCAN_MAX_PAGES` | No | Gamma pagination cap (default 50) |
+| `OPENROUTER_API_KEY` | No | Enables AI analysis |
+| `OPENROUTER_MODEL` | No | OpenRouter model id |
 
-## Learn More
+See [`.env.example`](.env.example) for the full list.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push this repo (or import the `poly-greedy-trading-next` folder as its own Git repo).
+2. Create a Vercel project from the repository root.
+3. Add environment variables in the Vercel dashboard (same names as `.env.example`).
+4. Deploy.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Timeout note:** Full scans with many Gamma pages can exceed Vercel Hobby’s 10s limit. Use a lower `SCAN_MAX_PAGES` on Hobby, or Vercel Pro for longer runs (`maxDuration` is set to 300s on scan/analyze routes).
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm dev      # development server
+pnpm build    # production build
+pnpm start    # run production build locally
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Disclaimer
+
+Research aid only — not financial advice. Verify resolution rules and prices on Polymarket before trading.
