@@ -49,7 +49,7 @@ export async function fetchEventsPage(
   const params = new URLSearchParams({
     active: 'true',
     closed: 'false',
-    order: 'end_date',
+    order: 'endDate',
     ascending: 'true',
     limit: String(limit),
     offset: String(offset),
